@@ -18,6 +18,7 @@ export const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const value = { currentUser, setCurrentUser };
 
+  //用于检查当前用户状态
   useEffect(() => {
     //使用onAuthStateChangeListener函数获得用户状态（跟auth有关）
     const unsubscribe = onAuthStateChangeListener(user => {

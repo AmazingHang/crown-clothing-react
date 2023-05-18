@@ -16,6 +16,7 @@ import "./navigation.styles.scss";
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
   const { isCartOpen } = useContext(CartContext);
+
   return (
     //使用Fragment，方便设置导航
     <Fragment>
@@ -29,6 +30,7 @@ const Navigation = () => {
           <Link className="nav-link" to="/shop">
             SHOP
           </Link>
+
           {
             //注意：写jsx风格代码前加上{}
             currentUser ? (
@@ -44,7 +46,7 @@ const Navigation = () => {
           <CartIcon />
         </div>
         {
-          //根据context条件判断
+          //根据context条件判断是否打开Cart
           isCartOpen && <CartDropdown />
         }
       </div>

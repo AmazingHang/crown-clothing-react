@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 //因为有复杂的逻辑，所以不能在数组中简单设置quantity
 const addCartItem = (cartItems, productToAdd) => {
@@ -23,9 +23,10 @@ const addCartItem = (cartItems, productToAdd) => {
 export const CartContext = createContext({
   isCartOpen: false,
   setCartOpen: () => {},
+  totalQuantity: 0,
+  setTotalQuantity: () => {},
   cartItems: [],
   addItemToCart: () => {},
-  cartCount: 0,
 });
 
 //2.创建Provider并引入index.js中
@@ -33,16 +34,7 @@ export const CartProvider = ({ children }) => {
   //setCartOpen在navigation里设置，如果值为True则显示下拉菜单
   const [isCartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
-
-  useEffect(() => {
-    //reduce返回回调函数中积累的结果，第一个参数为回调函数，第二个参数为初始值
-    const newCartCount = cartItems.reduce(
-      (total, cartItems) => total + cartItems.quantity,
-      0
-    );
-    setCartCount(newCartCount);
-  }, [cartItems]);
+  const [totalQuantity, setTotalQuantity] = useState(0);
 
   const addItemToCart = productToAdd => {
     //cartItems是原始的数据，productToAdd是要添加的数据
@@ -52,9 +44,10 @@ export const CartProvider = ({ children }) => {
   const value = {
     isCartOpen,
     setCartOpen,
+    totalQuantity,
+    setTotalQuantity,
     cartItems,
     addItemToCart,
-    cartCount,
   };
   //已经在context中初始化值，改value后也会改变context中的值
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

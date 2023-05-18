@@ -5,18 +5,12 @@ import { CartContext } from "../../contexts/cart.context";
 import Button from "../button/button.component";
 import "./product-card.styles.scss";
 
-//这是商店界面展示的产品
 const ProductCard = ({ product }) => {
   const { name, price, imageUrl } = product;
 
-  const { addItemToCart, totalQuantity, setTotalQuantity } =
-    useContext(CartContext);
+  const { addItemToCart } = useContext(CartContext);
 
-  const addProductToCart = () => {
-    addItemToCart(product);
-    setTotalQuantity(totalQuantity + 1);
-  };
-
+  const addProductToCart = () => addItemToCart(product);
   return (
     <div className="product-card-container">
       <img src={imageUrl} alt={`${name}`} />
