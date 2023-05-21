@@ -1,0 +1,7 @@
+.categories-preview-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 50px;
+  row-gap: 5px;
+}
+//grid网格，把界面分为网格状

@@ -13,12 +13,12 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Navigation />}>
         <Route index element={<Home />} />
-        <Route path="shop" element={<Shop />} />
+        <Route path="shop/*" element={<Shop />} />
         <Route path="auth" element={<Authentication />} />
         <Route path="checkout" element={<Checkout />} />
       </Route>
     </Routes>
   );
 };
-
+//default 关键字用于指定模块的默认导出，并允许在导入时使用任意的名称引用默认导出的内容。
 export default App;

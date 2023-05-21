@@ -1,27 +1,21 @@
-import './form-input.styles.scss'
+import { Group, Input, FormInputLabel } from "./form-input.styles";
 
 const FormInput = ({ label, ...otherProps }) => {
   return (
-    <div className='group'>
-      <input
-        className='form-input'
+    <Group>
+      <Input
         {...otherProps}
         //otherPros指的是value=''这类的传入属性
       />
-
       {
-        //如果存在label则。。。
+        //如果存在label，length为0返回false，非0返回true
         label && (
-          <label
-            className={`${
-              otherProps.value.length ? 'shrink' : ''
-            } form-input-label`} //添加shrink标签后达到缩小效果
-          >
+          <FormInputLabel shrink={otherProps.value.length}>
             {label}
-          </label>
+          </FormInputLabel>
         )
       }
-    </div>
-  )
-}
-export default FormInput
+    </Group>
+  );
+};
+export default FormInput;

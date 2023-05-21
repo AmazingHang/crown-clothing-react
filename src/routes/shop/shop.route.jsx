@@ -1,22 +1,16 @@
-import { useContext } from "react";
-import { ProductsContext } from "../../contexts/products.context";
+//Fragment 组件是 React 中的一个特殊组件，用于在 JSX 中包裹多个子元素，而不会在最终渲染中创建额外的 DOM 节点。它提供了一种灵活的方式来组织 JSX 结构，特别是在不希望引入额外层级或包裹元素时非常有用。
+import { Route, Routes } from "react-router-dom";
 
-import ProductCard from "../../components/product-card/product-card.component";
+import CategoriesPreview from "../categories-preview/categories-preview.route";
+import Category from "../category/category.route";
 
-import "./shop.styles.scss";
 //ShopPage仅是一个路由，承载products
 const Shop = () => {
-  //读取context中products的值
-  const { products } = useContext(ProductsContext);
   return (
-    <div className="products-container">
-      {
-        //注意这里是圆括号，代表return
-        products.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))
-      }
-    </div>
+    <Routes>
+      <Route index element={<CategoriesPreview />} />
+      <Route path=":category" element={<Category />} />
+    </Routes>
   );
 };
 
