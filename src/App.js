@@ -8,6 +8,8 @@ import Authentication from "./routes/authentication/authentication.route";
 import Shop from "./routes/shop/shop.route";
 import Checkout from "./routes/checkout/checkout.route";
 
+//在public中设置_redirects来解决netlify的重定向未找到网页问题
+
 const App = () => {
   return (
     <Routes>
