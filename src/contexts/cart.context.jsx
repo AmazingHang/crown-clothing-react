@@ -88,6 +88,7 @@ const cartReducer = (state, action) => {
 
 //2.创建Provider并引入index.js中
 export const CartProvider = ({ children }) => {
+  //从state参数解构出要存储的数据
   const [{ cartCount, isCartOpen, cartItems, cartTotal }, dispatch] =
     useReducer(cartReducer, INITIAL_STATE);
 

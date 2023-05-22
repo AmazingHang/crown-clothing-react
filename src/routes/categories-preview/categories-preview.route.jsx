@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 
-import { CategoriesContext } from "../../contexts/categories.context";
+import { selectCategoriesMap } from "../../store/categories/category.selector";
+
 import CategoryPreview from "../../components/category-preview/category-preview.component";
 
 //CategoriesPreview 是一个包含所有种类的路由，承载products
@@ -8,10 +9,9 @@ import CategoryPreview from "../../components/category-preview/category-preview.
 //详细信息在ProductCard中
 
 const CategoriesPreview = () => {
-  //读取context中products的值
-  const { categoriesMap } = useContext(CategoriesContext);
+  const categoriesMap = useSelector(selectCategoriesMap);
   return (
-    <div className="categories-preview-container">
+    <>
       {
         //把所有数据依次展现
         Object.keys(categoriesMap).map(title => {
@@ -21,7 +21,7 @@ const CategoriesPreview = () => {
           );
         })
       }
-    </div>
+    </>
   );
 };
 

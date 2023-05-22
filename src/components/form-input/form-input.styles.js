@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 const subColor = "grey";
 const mainColor = "black";
 
+//引入css特效
 const shrinkLabelStyles = css`
   top: -14px;
   font-size: 12px;

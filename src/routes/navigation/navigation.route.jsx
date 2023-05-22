@@ -4,16 +4,17 @@ import { Outlet } from "react-router-dom";
 import CartIcon from "../../components/cart-icon/cart-icon.component";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
 
+import { useSelector } from "react-redux";
+
 //引入context文件
-import { UserContext } from "../../contexts/user.context";
+
 import { CartContext } from "../../contexts/cart.context";
 
+import { selectCurrentUser } from "../../store/user/user.selector";
 //引入注销函数
 import { signOutUser } from "../../utils/firebase/firebase.utils";
-
 //调用svg图片时用这种方法。
 import { ReactComponent as CrownLogo } from "../../assets/crown.svg";
-
 //引入styled-components类型的css设计
 import {
   NavLink,
@@ -23,7 +24,8 @@ import {
 } from "./navigation.styles";
 
 const Navigation = () => {
-  const { currentUser } = useContext(UserContext);
+  //用于在redux中获得信息
+  const currentUser = useSelector(selectCurrentUser);
   const { isCartOpen } = useContext(CartContext);
 
   return (

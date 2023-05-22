@@ -1,11 +1,7 @@
 import { useContext } from "react";
 import { CartContext } from "../../contexts/cart.context";
 
-import {
-  ShoppingIcon,
-  CartIconContainer,
-  ItemCount,
-} from "./cart-icon.styles.jsx";
+import { ShoppingIcon, CartIconContainer, ItemCount } from "./cart-icon.styles";
 
 const CartIcon = () => {
   const { isCartOpen, setCartOpen, cartCount } = useContext(CartContext);

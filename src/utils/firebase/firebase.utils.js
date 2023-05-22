@@ -71,16 +71,8 @@ export const addCollectionAndDocuments = async (collectionKey, objectToAdd) => {
 export const getCategoriesAndDocuments = async () => {
   const collectionRef = collection(db, "categories");
   const q = query(collectionRef);
-  const queruSnapshot = getDocs(q);
-  //reduce迭代器
-  const categoryMap = (await queruSnapshot).docs.reduce((acc, docSnapshot) => {
-    //data() : Retrieves all fields in the document as an Object.
-    const { items, title } = docSnapshot.data();
-    acc[title.toLowerCase()] = items;
-    return acc;
-  }, {});
-
-  return categoryMap;
+  const queruSnapshot = await getDocs(q);
+  return queruSnapshot.docs.map(docSnapshot => docSnapshot.data());
 };
 
 //用于在数据库创建用户信息

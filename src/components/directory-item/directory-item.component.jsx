@@ -4,7 +4,7 @@ import {
   DirectoryItemContainer,
   BackgroundImage,
   Body,
-} from "./directory-item.styles.jsx";
+} from "./directory-item.styles";
 
 //默认返回函数用()
 const DirectoryItem = ({ category }) => {
