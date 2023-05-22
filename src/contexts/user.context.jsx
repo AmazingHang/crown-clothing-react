@@ -1,7 +1,8 @@
 //context用于程序内存储数据，方便相应元素调用（类似于内存）
 //创建context时，首先引入createContext
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 
+import { createAction } from "../utils/reducer/reducer.utils";
 import {
   onAuthStateChangeListener,
   createUserDocumentFromAuth,
@@ -10,13 +11,38 @@ import {
 //as the actual value you want to access
 export const UserContext = createContext({
   currentUser: null,
-  setCurrentUser: null,
 });
+
+//用变量的形式避免人为错误
+export const USER_ACTION_TYPES = {
+  SET_CURRENT_USER: "SET_CURRENT_USER",
+};
+
+const userReducer = (state, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case USER_ACTION_TYPES.SET_CURRENT_USER:
+      //只改变符合的状态
+      return {
+        ...state,
+        currentUser: payload,
+      };
+    default:
+      throw new Error(`Unhandled type ${type} in userReducer`);
+  }
+};
+
+const INITIANL_STATE = {
+  currentUser: null,
+};
 
 //提供改变context的工具，目前仅在配置文件生效
 export const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const value = { currentUser, setCurrentUser };
+  //useReducer接受两个参数，一个是设置，一个是初始值
+  //从state中取出currentUser
+  const [{ currentUser }, dispatch] = useReducer(userReducer, INITIANL_STATE);
+
+  const value = { currentUser };
 
   //用于检查当前用户状态
   useEffect(() => {
@@ -26,8 +52,8 @@ export const UserProvider = ({ children }) => {
       if (user) {
         createUserDocumentFromAuth(user);
       }
-      //默认设置当前用户
-      setCurrentUser(user);
+      //默置当前用户
+      dispatch(createAction(USER_ACTION_TYPES.SET_CURRENT_USER, user));
     });
     return unsubscribe;
   }, []);

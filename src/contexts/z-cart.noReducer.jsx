@@ -1,7 +1,4 @@
-import { createContext, useReducer } from "react";
-
-//增加代码可读性
-import { createAction } from "../utils/reducer/reducer.utils";
+import { createContext, useEffect, useState } from "react";
 
 //因为有复杂的逻辑，所以不能在数组中简单设置quantity
 const addCartItem = (cartItems, productToAdd) => {
@@ -19,6 +16,9 @@ const addCartItem = (cartItems, productToAdd) => {
     );
   }
   //3.if not found, return new array with modified cartItems / new cart item
+  //对象展开语法 { ...object } 用于创建一个新的对象，该对象继承了 object 的所有属性。
+  //在这种情况下，productToAdd 对象的所有属性将被复制到新创建的对象中，然后添加一个新的属性 quantity 并设置其值为 1。
+  //必须创建新的对象，否则无法触发渲染
   return [...cartItems, { ...productToAdd, quantity: 1 }];
 };
 
@@ -43,7 +43,7 @@ const clearCartItem = (cartItems, cartItemToClear) => {
   return cartItems.filter(cartItem => cartItem.id !== cartItemToClear.id);
 };
 
-//1.定义并初始化一个context
+//1.初始化一个context
 export const CartContext = createContext({
   isCartOpen: false,
   setCartOpen: () => {},
@@ -55,76 +55,47 @@ export const CartContext = createContext({
   cartTotal: 0,
 });
 
-const CART_ACTION_TYPES = {
-  SET_CART_ITEMS: "SET_CART_ITEMS",
-  SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
-};
-
-const INITIAL_STATE = {
-  cartCount: 0,
-  isCartOpen: false,
-  cartItems: [],
-  cartTotal: 0,
-};
-
-const cartReducer = (state, action) => {
-  const { type, payload } = action;
-
-  switch (type) {
-    case CART_ACTION_TYPES.SET_CART_ITEMS:
-      return {
-        ...state,
-        ...payload,
-      };
-    case CART_ACTION_TYPES.SET_IS_CART_OPEN:
-      return {
-        ...state,
-        isCartOpen: payload,
-      };
-    default:
-      throw new Error(`Unhandled type ${type} in userReducer`);
-  }
-};
-
 //2.创建Provider并引入index.js中
 export const CartProvider = ({ children }) => {
-  const [{ cartCount, isCartOpen, cartItems, cartTotal }, dispatch] =
-    useReducer(cartReducer, INITIAL_STATE);
+  //setCartOpen在navigation里设置，如果值为True则显示下拉菜单
+  const [isCartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+  const [cartTotal, setCartTotal] = useState(0);
 
-  const updateCartItemsReducer = newCartItems => {
+  //此hook可以计算购物车中的总数，当cartItems变化后，他会更新
+  //如果不使用hooks，则状态更新后需要自己配置对应操作
+  useEffect(() => {
     //reduce返回回调函数中积累的结果，第一个参数为回调函数，第二个参数为初始值
-    const newCartCount = newCartItems.reduce(
+    const newCartCount = cartItems.reduce(
       (total, cartItems) => total + cartItems.quantity,
       0
     );
-    const newCartTotal = newCartItems.reduce(
+    setCartCount(newCartCount);
+  }, [cartItems]);
+
+  useEffect(() => {
+    //reduce返回回调函数中积累的结果，第一个参数为回调函数，第二个参数为初始值
+    const newCartTotal = cartItems.reduce(
       (total, cartItem) => total + cartItem.quantity * cartItem.price,
       0
     );
-    dispatch(
-      createAction(CART_ACTION_TYPES.SET_CART_ITEMS, {
-        cartItems: newCartItems,
-        cartTotal: newCartTotal,
-        cartCount: newCartCount,
-      })
-    );
-  };
+    setCartTotal(newCartTotal);
+  }, [cartItems]);
 
   //这些函数都接受一个参数，然后改变本文件内的cartItems的值
+
   const addItemToCart = productToAdd => {
-    const newCartItems = addCartItem(cartItems, productToAdd);
-    updateCartItemsReducer(newCartItems);
+    //cartItems是原始的数据，productToAdd是要添加的数据
+    setCartItems(addCartItem(cartItems, productToAdd));
   };
   const removeItemFromCart = cartItemToRemove => {
-    const newCartItems = removeCartItem(cartItems, cartItemToRemove);
-    updateCartItemsReducer(newCartItems);
+    //cartItems是原始的数据，productToAdd是要添加的数据
+    setCartItems(removeCartItem(cartItems, cartItemToRemove));
   };
   const clearItemFromCart = cartItemToClear => {
-    const newCartItems = clearCartItem(cartItems, cartItemToClear);
-    updateCartItemsReducer(newCartItems);
-  };
-  const setCartOpen = bool => {
-    dispatch(createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool));
+    //cartItems是原始的数据，productToAdd是要添加的数据
+    setCartItems(clearCartItem(cartItems, cartItemToClear));
   };
 
   //这些值和回调函数，可以在context里找到
