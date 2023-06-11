@@ -8,12 +8,14 @@ import ProductCard from "../../components/product-card/product-card.component";
 //样式
 import { CategoryContainer, CategoryTitle } from "./category.styles.js";
 
+//具体的种类对应的路由
 const Category = () => {
   //获得路径中的category参数
   const { category } = useParams();
   //获得程序中的数据
   const categoriesMap = useSelector(selectCategoriesMap);
   const [products, setProducts] = useState(categoriesMap[category]);
+
   //只在路径变化或者数据更新时渲染，在路径中获得距离的category值，并找到对应数组
   useEffect(() => {
     setProducts(categoriesMap[category]);

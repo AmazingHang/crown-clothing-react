@@ -1,3 +1,4 @@
+//reducer用于初始化和条件判断
 import { USER_ACTION_TYPES } from "./user.types";
 
 const INITIANL_STATE = {

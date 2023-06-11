@@ -27,7 +27,6 @@ const SignInForm = () => {
 
   const signInWithGoogle = async () => {
     await signInWithGooglePopup();
-    //createUserDocumentFromAuth()这个函数写在user.context了
   };
 
   //涉及提交，验证邮箱密码登陆
